@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="planets_array">
+        <item>@string/mercury</item>
+        <item>@string/venus</item>
+        <item>@string/earth</item>
+        <item>@string/mars</item>
+        <item>@string/jupiter</item>
+        <item>@string/saturn</item>
+        <item>@string/uranus</item>
+        <item>@string/neptune</item>
+    </string-array>
+</resources>

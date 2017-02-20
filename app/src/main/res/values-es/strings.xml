@@ -2,4 +2,12 @@
 <resources>
     <string name="date">Fecha</string>
     <string name="time">Hora</string>
+    <string name="earth">Tierra</string>
+    <string name="jupiter">Júpiter</string>
+    <string name="mars">Marte</string>
+    <string name="mercury">Mercurio</string>
+    <string name="neptune">Neptuno</string>
+    <string name="saturn">Saturno</string>
+    <string name="uranus">Urano</string>
+    <string name="venus">Venus</string>
 </resources>
