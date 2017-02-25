@@ -10,4 +10,11 @@
     <string name="saturn">Saturn</string>
     <string name="uranus">Uranus</string>
     <string name="neptune">Neptune</string>
+    <string name="calculate">Calculate</string>
+    <string name="your_next_birthday">Your next birthday (%s) in</string>
+    <string name="will_be_on">will be on %1$s at %2$s</string>
+    <plurals name="years">
+        <item quantity="one">%d year</item>
+        <item quantity="other">%d years</item>
+    </plurals>
 </resources>

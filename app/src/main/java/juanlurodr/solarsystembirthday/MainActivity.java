@@ -2,17 +2,18 @@ package juanlurodr.solarsystembirthday;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
@@ -20,15 +21,12 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
-import static java.util.Calendar.DAY_OF_MONTH;
-import static java.util.Calendar.MONTH;
-import static java.util.Calendar.YEAR;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private static String APP_TAG = "SolarSystemBirthday";
 
     //Tropical orbit periods are taken from http://nssdc.gsfc.nasa.gov/planetary/factsheet/
+
 
     private static double TROPICAL_PERIOD_MERCURY = 87.968;
     private static double TROPICAL_PERIOD_VENUS = 224.695;
@@ -39,8 +37,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static double TROPICAL_PERIOD_URANUS = 30588.740;
     private static double TROPICAL_PERIOD_NEPTUNE = 59799.9;
 
-    Button btnDatePicker, btnTimePicker;
+    Button btnDatePicker, btnTimePicker, btnCalculate;
     EditText txtDate, txtTime;
+    TextView txtResult;
     Spinner planetSpinner;
 
     Calendar selectedDateTime;
@@ -53,8 +52,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btnDatePicker = (Button) findViewById(R.id.dateButton);
         btnTimePicker = (Button) findViewById(R.id.timeButton);
+        btnCalculate = (Button) findViewById(R.id.calculateButton);
         txtDate = (EditText) findViewById(R.id.dateText);
         txtTime = (EditText) findViewById(R.id.timeText);
+        txtResult = (TextView) findViewById(R.id.resultText);
         planetSpinner = (Spinner) findViewById(R.id.planetSpinner);
 
         LinkedList<Planet> planets = new LinkedList<>();
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btnDatePicker.setOnClickListener(this);
         btnTimePicker.setOnClickListener(this);
+        btnCalculate.setOnClickListener(this);
         planetSpinner.setOnItemSelectedListener(this);
 
         selectedDateTime = GregorianCalendar.getInstance();
@@ -106,6 +108,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     }, selectedDateTime.get(Calendar.HOUR_OF_DAY), selectedDateTime.get(Calendar.MINUTE), true);
             timePickerDialog.show();
+        }
+        if (v == btnCalculate) {
+            Calendar now = Calendar.getInstance();
+            Calendar calculated = (Calendar) selectedDateTime.clone();
+            int yearsPassed = 0;
+            while (calculated.before(now)) {
+                calculated.setTimeInMillis(calculated.getTimeInMillis()+selectedPlanet.getTropicalOrbitPeriodInMilliseconds());
+                yearsPassed++;
+            }
+            Resources res = getResources();
+            String years = res.getQuantityString(R.plurals.years, yearsPassed, yearsPassed);
+            String yourNextBirthday = String.format(res.getString(R.string.your_next_birthday), years);
+            String willBeOn = String.format(res.getString(R.string.will_be_on), new SimpleDateFormat("yyyy-MM-dd").format(calculated.getTime()), new SimpleDateFormat("HH:mm").format(calculated.getTime()));
+            txtResult.setText(String.format("%s\n%s\n%s", yourNextBirthday, selectedPlanet, willBeOn));
+            Log.d(APP_TAG, String.format("Planet: %s\nYears: %d\nDate: %s", selectedPlanet, yearsPassed, new SimpleDateFormat("yyyy-MM-dd HH:mm").format(calculated.getTime())));
         }
     }
 
